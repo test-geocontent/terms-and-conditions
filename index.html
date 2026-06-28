@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The 2026 Microcap Stock Picking Contest | Sponsored by GeoInvesting & MS Microcaps</title>
+  <meta name="description" content="$15,000+ in prizes. No entry fee. Compete in the 2026 Microcap Stock Picking Contest across three major conferences. Sponsored by GeoInvesting and MS Microcaps." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+	<style>
+    :root {
+      --navy:    #0B1628;
+      --navy2:   #0F1E38;
+      --navy3:   #162544;
+      --charcoal:#1E2A3B;
+      --gold:    #C9A84C;
+      --gold2:   #E8C56A;
+      --gold3:   #F5DFA0;
+      --white:   #F2F4F7;
+      --muted:   #8A97AA;
+      --border:  rgba(201,168,76,0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--navy);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Typography ── */
+    .display { font-family: 'Playfair Display', Georgia, serif; }
+    .mono    { font-family: 'Roboto Mono', monospace; }
+
+    /* ── Gold rule ── */
+    .rule-gold { border: none; border-top: 1px solid var(--border); }
+
+    /* ── Nav ── */
+    .nav-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(11,22,40,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Chart canvas bg ── */
+    #chart-canvas {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      opacity: .22;
+    }
+
+    /* ── Hero ── */
+    .hero-section {
+      position: relative;
+      min-height: 100vh;
+      background: radial-gradient(ellipse 80% 60% at 60% 40%, #162544 0%, #0B1628 70%);
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: .72rem;
+      font-weight: 500;
+      color: var(--gold);
+    }
+
+    .headline-main {
+      font-size: clamp(2.1rem, 5.5vw, 4.2rem);
+      line-height: 1.10;
+      color: var(--white);
+    }
+
+    .prize-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #C9A84C 0%, #F5DFA0 55%, #C9A84C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Conference cards */
+    .conf-card {
+      background: rgba(22,37,68,0.7);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .25s, transform .25s;
+    }
+    .conf-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .conf-card:hover { 
+  border-color: rgba(201,168,76,.5); 
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+}
+    .conf-card:hover::before { opacity: 1; }
+
+/* Conference website link */
+.conf-link{
+  display:inline-flex;
+  align-items:center;
+  gap:.3rem;
+  font-size:.78rem;
+  font-weight:500;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--gold);
+  text-decoration:none;
+  transition:opacity .2s,color .2s;
+  white-space:nowrap;
+  opacity:.9;
+}
+
+.conf-link:hover{
+  color:var(--gold2);
+  opacity:1;
+}
+
+    /* Countdown */
+    .countdown-block {
+      background: rgba(22,37,68,0.5);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: .75rem 1.2rem;
+      text-align: center;
+      min-width: 68px;
+    }
+    .countdown-num {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--gold2);
+    }
+    .countdown-lbl {
+      font-size: .6rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: .1rem;
+    }
+
+    /* Step cards */
+    .step-card {
+      background: var(--charcoal);
+      border: 1px solid rgba(201,168,76,.12);
+      border-radius: 4px;
+      padding: 2rem 1.75rem;
+      transition: border-color .25s;
+    }
+    .step-card:hover { border-color: rgba(201,168,76,.35); }
+    .step-num {
+      font-family: 'Roboto Mono', monospace;
+      font-size: .8rem;
+      color: var(--gold);
+      letter-spacing: .1em;
+    }
+
+    /* Entry badge */
+.entry-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.75rem 1.4rem;
+  border:1px solid rgba(201,168,76,.45);
+  background:rgba(201,168,76,.08);
+  color:var(--gold2);
+  font-size:.92rem;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  border-radius:999px;
+  box-shadow:0 0 24px rgba(201,168,76,.12);
+  white-space:nowrap;
+}
+    
+    /* Prize pool */
+    .prize-pool-section {
+      background: linear-gradient(180deg, #0F1E38 0%, #0B1628 100%);
+      position: relative;
+    }
+    .prize-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      background: linear-gradient(135deg, #C9A84C 0%, #F5DFA0 50%, #C9A84C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .prize-card {
+      background: rgba(22,37,68,0.65);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      display: flex; align-items: center; gap: .85rem;
+    }
+    .prize-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--gold); flex-shrink: 0;
+    }
+
+    /* Why section */
+    .why-section { background: var(--charcoal); }
+    .pullquote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+      line-height: 1.5;
+      color: var(--white);
+      border-left: 3px solid var(--gold);
+      padding-left: 1.5rem;
+    }
+
+    /* Registration */
+    .reg-section { background: linear-gradient(180deg, #0B1628 0%, #162544 100%); }
+    .benefit-item {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .65rem 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: .92rem;
+      color: #C8D4E0;
+    }
+    .benefit-item:last-child { border-bottom: none; }
+    .benefit-check {
+      color: var(--gold);
+      flex-shrink: 0;
+      font-size: .85rem;
+    }
+
+    /* Email form */
+    .email-input {
+      background: rgba(22,37,68,0.7);
+      border: 1px solid rgba(201,168,76,.3);
+      border-radius: 3px;
+      padding: .85rem 1.2rem;
+      color: var(--white);
+      font-size: .95rem;
+      font-family: 'Inter', sans-serif;
+      width: 100%;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .email-input:focus { border-color: var(--gold); }
+    .email-input::placeholder { color: var(--muted); }
+    .btn-gold {
+      background: linear-gradient(135deg, #C9A84C, #E8C56A);
+      color: #0B1628;
+      font-weight: 600;
+      font-size: .88rem;
+      letter-spacing: .04em;
+      border: none;
+      border-radius: 3px;
+      padding: .85rem 1.8rem;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+      white-space: nowrap;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-gold:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      color: var(--gold);
+      font-weight: 500;
+      font-size: .88rem;
+      letter-spacing: .04em;
+      border: 1px solid var(--gold);
+      border-radius: 3px;
+      padding: .82rem 1.6rem;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-outline:hover { background: rgba(201,168,76,.1); }
+
+    /* Testimonial */
+    .testimonial-card {
+      background: rgba(22,37,68,0.55);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.75rem;
+    }
+    .stars { color: var(--gold); font-size: .9rem; letter-spacing: .05em; }
+
+    /* FAQ */
+    .faq-item {
+      border-bottom: 1px solid rgba(201,168,76,.12);
+    }
+    .faq-btn {
+      width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.35rem 0;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: .97rem;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .faq-btn:hover { color: var(--gold2); }
+    .faq-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height .35s ease, padding .3s;
+      color: #A0B0C4;
+      font-size: .9rem;
+      line-height: 1.7;
+      padding-bottom: 0;
+    }
+    .faq-body.open { max-height: 400px; padding-bottom: 1.2rem; }
+    .faq-icon { transition: transform .3s; color: var(--gold); font-size: 1.2rem; flex-shrink: 0; }
+    .faq-icon.open { transform: rotate(45deg); }
+
+    /* Disclaimer */
+    .disclaimer-section {
+      background: rgba(11,22,40,0.9);
+      border-top: 1px solid var(--border);
+    }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* Ticker tape */
+    .ticker-wrap {
+      overflow: hidden;
+      background: rgba(15,30,56,0.9);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .ticker-inner {
+      display: flex; gap: 0;
+      width: max-content;
+      animation: ticker 120s linear infinite;
+    }
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      padding: .55rem 2.2rem;
+      font-size: .75rem;
+      font-family: 'Roboto Mono', monospace;
+      letter-spacing: .04em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .ticker-item span { color: var(--gold2); margin-right: .4rem; }
+    .ticker-item .up   { color: #4ADE80; }
+    .ticker-item .down { color: #F87171; }
+
+    /* Floating grid lines */
+    .grid-overlay {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(201,168,76,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    /* Sponsor bar */
+    .sponsor-pill {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: rgba(201,168,76,.08);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: .45rem 1rem;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gold3);
+    }
+    .sponsor-logo {
+      background: rgba(201,168,76,.15);
+      border: 1px solid rgba(201,168,76,.25);
+      border-radius: 2px;
+      padding: .65rem 1.2rem;
+      font-family: 'Playfair Display', serif;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--gold2);
+      letter-spacing: .06em;
+    }
+
+		/* ── Rules Page ── */
+.rules-section {
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 60% at 60% 20%, rgba(22,37,68,.9) 0%, rgba(11,22,40,1) 72%);
+  overflow: hidden;
+}
+
+.rules-card {
+  background: rgba(22,37,68,0.62);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 24px 70px rgba(0,0,0,.24);
+  padding: clamp(1.4rem, 3vw, 2.5rem);
+}
+
+.rule-item {
+  padding: 1.4rem 0;
+  border-bottom: 1px solid rgba(201,168,76,.14);
+}
+
+.rule-item:first-child {
+  padding-top: 0;
+}
+
+.rule-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.rule-item h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--gold2);
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.25;
+  margin-bottom: .75rem;
+}
+
+.rule-item p {
+  color: #C8D4E0;
+  font-size: .94rem;
+  line-height: 1.75;
+  margin-bottom: .85rem;
+}
+
+.rule-item p:last-child {
+  margin-bottom: 0;
+}
+
+.rule-item ul {
+  color: #C8D4E0;
+  font-size: .94rem;
+  line-height: 1.75;
+  margin-left: 1.25rem;
+  margin-top: .75rem;
+}
+
+.rule-item li {
+  margin-bottom: .55rem;
+}
+
+.rule-item li::marker {
+  color: var(--gold);
+}
+		
+    @media (max-width: 640px) {
+      .conf-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Subtle glow on prize number */
+    .prize-glow {
+      filter: drop-shadow(0 0 32px rgba(201,168,76,.25));
+    }
+
+    /* Section labels */
+    .section-label {
+      font-size: .72rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background: #060E1C;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Nav mobile */
+    #nav-mobile { display: none; }
+    #nav-mobile.show { display: flex; }
+
+    /* Animate in hero content */
+    .hero-content > * { animation: fadeUp .7s ease both; }
+    .hero-content > *:nth-child(1) { animation-delay: .05s; }
+    .hero-content > *:nth-child(2) { animation-delay: .15s; }
+    .hero-content > *:nth-child(3) { animation-delay: .25s; }
+    .hero-content > *:nth-child(4) { animation-delay: .35s; }
+    .hero-content > *:nth-child(5) { animation-delay: .45s; }
+    .hero-content > *:nth-child(6) { animation-delay: .55s; }
+    .hero-content > *:nth-child(7) { animation-delay: .65s; }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(20px); }
+      to   { opacity:1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+<nav class="nav-bar">
+  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+    <!-- Logo -->
+    <a href="https://investingcontest.com/" target="_blank" class="display font-bold text-sm tracking-wide" style="color:var(--gold2)">
+      MICROCAP<span style="color:var(--muted)">CONTEST</span><span style="color:var(--gold);font-size:.65rem;vertical-align:super;margin-left:2px">2026</span>
+    </a>
+
+    <!-- Desktop Links -->
+    <div class="hidden md:flex items-center gap-7">
+
+  <a href="https://infoarb.io/" target="_blank"
+     class="text-xs tracking-widest uppercase hover:text-yellow-300 transition-colors"
+     style="color:var(--muted)">
+    InfoArb Monitor
+  </a>
+
+  <a href="https://geoinvesting.com/" target="_blank"
+     class="text-xs tracking-widest uppercase hover:text-yellow-300 transition-colors"
+     style="color:var(--muted)">
+    GeoInvesting
+  </a>
+
+  <a href="https://mscliffnotes.substack.com/" target="_blank"
+     class="text-xs tracking-widest uppercase hover:text-yellow-300 transition-colors"
+     style="color:var(--muted)">
+    Cliff Notes Substack
+  </a>
+
+</div>
+
+    <!-- Hamburger -->
+    <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+      <span class="block w-5 h-px bg-white"></span>
+      <span class="block w-5 h-px bg-white"></span>
+      <span class="block w-5 h-px bg-white"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+ <div id="nav-mobile" class="flex-col px-6 pb-5 gap-4 md:hidden border-t" style="border-color:var(--border)">
+
+  <a href="https://infoarb.io/" target="_blank"
+     class="text-xs tracking-widest uppercase py-1"
+     style="color:var(--muted)">
+    InfoArb Monitor
+  </a>
+
+  <a href="https://geoinvesting.com/" target="_blank"
+     class="text-xs tracking-widest uppercase py-1"
+     style="color:var(--muted)">
+    GeoInvesting
+  </a>
+
+  <a href="https://mscliffnotes.substack.com/" target="_blank"
+     class="text-xs tracking-widest uppercase py-1"
+     style="color:var(--muted)">
+    Cliff Notes Substack
+  </a>
+
+</div>
+</nav>
+
+<!-- ═══════════════════════════ CONTEST RULES ═══════════════════════════ -->
+<section class="rules-section pt-32 pb-24 px-6" id="contest-rules">
+  <div class="grid-overlay"></div>
+
+  <div class="max-w-5xl mx-auto relative">
+
+    <div class="max-w-4xl mb-12 reveal">
+      <div class="section-label mb-4">Contest Rules</div>
+
+      <h1 class="display font-semibold mb-5"
+          style="font-size:clamp(2.1rem,4.8vw,4rem);color:var(--white);line-height:1.1">
+        Fictional Stock Picking Contest Rules
+      </h1>
+
+      <p style="color:var(--muted);font-size:.96rem;line-height:1.75;max-width:66ch">
+        Review the official rules, eligibility requirements, scoring process, prize structure,
+        and participant responsibilities for the Fictional Stock Picking Contest 2026.
+      </p>
+    </div>
+
+    <div class="rules-card reveal">
+
+      <div class="rule-item">
+        <h2>1. Introduction</h2>
+        <p>The Fictional Stock Picking Contest 2026 is a virtual investment competition designed for educational and entertainment purposes. Participants compete by creating a simulated stock portfolio using virtual funds. No real money is invested, and all trading activity is hypothetical.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>2. Eligibility</h2>
+        <p>Participation is open to individuals who are at least eighteen (18) years of age at the time of registration. Each participant may register only one account. Duplicate registrations may result in disqualification.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>3. Registration</h2>
+        <p>Registration opens on January 5, 2026, and closes on January 25, 2026. All participants must complete their registration before the deadline. Late registrations will not be accepted.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>4. Contest Period</h2>
+        <p>The contest begins on February 1, 2026, and concludes on July 31, 2026. Portfolio performance will be measured throughout this period.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>5. Starting Portfolio</h2>
+        <p>Each participant will receive a virtual portfolio valued at $100,000. The funds have no cash value and cannot be exchanged for real currency.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>6. Portfolio Requirements</h2>
+        <p>Participants must construct a portfolio consisting of exactly ten (10) stocks. The entire virtual balance must be allocated before the contest begins. No individual stock may represent more than twenty percent (20%) of the portfolio or less than five percent (5%).</p>
+        <p>Fractional shares are permitted.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>7. Portfolio Lock</h2>
+        <p>Once the contest officially begins, portfolios become locked. Participants may not buy, sell, replace, or rebalance any holdings during the contest period.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>8. Scoring</h2>
+        <p>Portfolio performance will be calculated based on the percentage increase or decrease in total portfolio value from the starting balance.</p>
+        <p>The participant with the highest overall portfolio return at the end of the contest will be declared the winner.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>9. Tie-Breaking Procedure</h2>
+        <p>If two or more participants achieve identical portfolio returns, the following tie-breakers will be applied in order:</p>
+        <ul>
+          <li>The portfolio with the lower overall volatility will rank higher.</li>
+          <li>If a tie still exists, the participant with the earlier registration date and time will rank higher.</li>
+          <li>If a tie remains after these criteria, the winner will be selected through a random draw conducted by the contest organizers.</li>
+        </ul>
+      </div>
+
+      <div class="rule-item">
+        <h2>10. Participant Conduct</h2>
+        <p>Participants are expected to compete fairly and honestly. The use of multiple accounts, automated systems, fraudulent activities, or any attempt to manipulate contest results is strictly prohibited.</p>
+        <p>The organizers reserve the right to investigate suspicious activity and disqualify participants who violate these rules.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>11. Results</h2>
+        <p>Official results will be announced within ten (10) days after the contest concludes. All calculations performed by the contest organizers are considered final.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>12. Prizes</h2>
+        <p>The first-place participant will receive a fictional grand prize of $5,000.</p>
+        <p>The second-place participant will receive a fictional prize of $2,500.</p>
+        <p>The third-place participant will receive a fictional prize of $1,000.</p>
+        <p>The remaining participants in the top ten will receive fictional certificates of achievement.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>13. Organizer Rights</h2>
+        <p>The organizers reserve the right to amend these rules, postpone contest dates, suspend participation, or cancel the contest if unforeseen circumstances affect the integrity of the competition.</p>
+        <p>Any significant changes will be announced before they become effective.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>14. Acceptance of Rules</h2>
+        <p>By registering for the contest, participants acknowledge that they have read, understood, and agreed to abide by all contest rules and decisions made by the organizers.</p>
+      </div>
+
+      <div class="rule-item">
+        <h2>15. Disclaimer</h2>
+        <p>This contest is entirely fictional and intended solely as an example of how a stock-picking competition could be organized. All names, dates, prizes, companies, and financial figures are invented for demonstration purposes only and do not represent any actual event or investment opportunity.</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SPONSORS ═══════════════════════════ -->
+<section class="py-20 px-6" style="background:var(--navy2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="max-w-4xl mx-auto text-center">
+
+    <div class="section-label mb-8 reveal">Presented By</div>
+
+    <div class="flex flex-wrap items-center justify-center gap-10 reveal">
+
+      <!-- InfoArb -->
+      <a href="https://infoarb.io/" target="_blank" rel="noopener noreferrer">
+        <img
+          src="https://microcapcontest.b-cdn.net/IM%20Logo%20White.svg"
+          alt="InfoArb Monitor"
+          style="height:60px;width:auto"
+        />
+      </a>
+
+      <!-- GeoInvesting -->
+      <a href="https://geoinvesting.com/" target="_blank" rel="noopener noreferrer">
+        <img
+          src="https://microcapcontest.b-cdn.net/geo-png-24.png"
+          alt="GeoInvesting"
+          style="height:60px;width:auto"
+        />
+      </a>
+
+      <!-- Cliff Notes -->
+      <a href="https://mscliffnotes.substack.com/" target="_blank" rel="noopener noreferrer">
+        <img
+          src="https://microcapcontest.b-cdn.net/MS%20Cliff%20Notes%20Logo.png"
+          alt="MS Cliff Notes"
+          style="height:52px;width:auto"
+        />
+      </a>
+
+    </div>
+
+    <p class="text-xs mt-6 reveal"
+       style="color:var(--muted);max-width:50ch;margin-left:auto;margin-right:auto;line-height:1.7">
+      GeoInvesting and MS Microcaps research microcap stocks, track management teams, and analyze market opportunities. This contest gives independent investors, analysts, fund managers, and newsletter writers a structured way to showcase stock-picking skill in the microcap landscape.
+    </p>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ DISCLAIMER ═══════════════════════════ -->
+<section class="disclaimer-section py-12 px-6">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex items-start gap-4">
+      <div class="flex-shrink-0 mt-0.5">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:var(--gold)"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="text-xs tracking-widest uppercase mb-2" style="color:var(--gold);font-weight:500">Disclaimer</div>
+        <p style="color:var(--muted);font-size:.8rem;line-height:1.75">
+          This contest is for educational and entertainment purposes only. Nothing on this page should be considered investment advice or a recommendation to buy or sell any security. All investing involves risk, including the possible loss of principal. Participants are responsible for their own research and investment decisions. Past performance is not indicative of future results. GeoInvesting and MS Microcaps are not registered investment advisors.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="py-14 px-6">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+
+      <div class="md:col-span-2">
+        <div class="display font-bold text-base mb-3" style="color:var(--gold2)">
+          MICROCAP CONTEST 2026
+        </div>
+        <p style="color:var(--muted);font-size:.82rem;line-height:1.75;max-width:36ch">
+          Sponsored by GeoInvesting and MS Microcaps. A stock picking competition for microcap investors.
+        </p>
+        <div class="flex gap-3 mt-5">
+          <div class="sponsor-logo" style="font-size:.75rem;padding:.5rem .9rem">GeoInvesting</div>
+          <div class="sponsor-logo" style="font-size:.75rem;padding:.5rem .9rem">MS Microcaps</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="text-xs tracking-widest uppercase mb-4" style="color:var(--gold);font-weight:500">Contest</div>
+        <div class="flex flex-col gap-3">
+          <a href="https://investingcontest.com/" target="_blank" rel="noopener noreferrer" class="text-xs hover:text-white transition-colors" style="color:var(--muted)">2026 Contest</a>
+          <span class="text-xs" style="color:#4A5568">Contest Rules <span style="color:var(--gold);font-size:.65rem">(Coming Soon)</span></span>
+        </div>
+      </div>
+
+      <div>
+        <div class="text-xs tracking-widest uppercase mb-4" style="color:var(--gold);font-weight:500">Resources</div>
+        <div class="flex flex-col gap-3">
+          <a href="https://geoinvesting.com" target="_blank" class="text-xs hover:text-white transition-colors" style="color:var(--muted)">About GeoInvesting</a>
+          <a href="https://mscliffnotes.substack.com" target="_blank" class="text-xs hover:text-white transition-colors" style="color:var(--muted)">Cliff Notes Substack</a>
+		  <a href="https://infoarb.io/" class="text-xs hover:text-white transition-colors" style="color:var(--muted)">InfoArb Monitor</a>
+          <a href="https://deltasheets.substack.com/" target="_blank" class="text-xs hover:text-white transition-colors" style="color:var(--muted)">InfoArb Sheets</a>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="rule-gold mb-6" />
+
+    <div class="flex flex-col sm:flex-row justify-between gap-3">
+      <p class="text-xs" style="color:#4A5568">© 2026 GeoInvesting &amp; MS Microcaps. All rights reserved.</p>
+      <p class="text-xs" style="color:#4A5568">Educational &amp; entertainment purposes only. Not investment advice.</p>
+    </div>
+
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════ SCRIPTS ═══════════════════════════ -->
+<script>
+
+/* ── Hamburger ── */
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-mobile').classList.toggle('show');
+});
+
+/* ── Scroll reveal ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+</script>
+</body>
+</html>
